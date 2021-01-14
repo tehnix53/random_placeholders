@@ -1,6 +1,7 @@
 import numpy as np
 import string
 import cv2
+import glob
 import random
 import os
 from PIL import ImageFont, ImageDraw, Image
@@ -11,8 +12,8 @@ from fonts_experiment import all_fonts
 
 # LISTS WITH MAIN FILES
 
-
-backgrounds = [os.path.join(background_dir, i) for i in os.listdir(background_dir) if i.endswith('.jpg')]
+backgrounds = glob.glob(os.path.join(background_dir, '*'))
+#backgrounds = [os.path.join(background_dir, i) for i in os.listdir(background_dir) if i.endswith('.jpg')]
 rangs = [os.path.join(source_dir, i) for i in os.listdir(source_dir) if len(i) <= 2]
 suits = [os.path.join(source_dir, i) for i in os.listdir(source_dir) if len(i) > 2]
 print (rangs)
