@@ -36,7 +36,7 @@ for i in tqdm.tqdm(range(number_of_images)):
     font_size = random.randint(font_size_range[0], font_size_range[1])
     test = playground_wrapper(number_of_card, font_size, number_of_textbox,
                               font_size, number_of_moneybox)
-    test[0].save(os.path.join(SAVE_PATH, str(i) + str('.jpg')))
+    test[0].save(os.path.join(SAVE_PATH, str(i) + str('.webp')))
     with open(os.path.join(SAVE_PATH, str(i) + '.txt'), 'w') as output_file:
         output_file.write(drop_blanks(test[1]))
 
