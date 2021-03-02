@@ -1,48 +1,55 @@
 import numpy as np
-import string
+import string, math
 import cv2
 import glob
 import random
 import os
 from PIL import ImageFont, ImageDraw, Image
-
 from config import *
-from white_background import unique_white
-from fonts_experiment import all_fonts
 
-# LISTS WITH MAIN FILES
-
-backgrounds = glob.glob(os.path.join(background_dir, '*'))
-#backgrounds = [os.path.join(background_dir, i) for i in os.listdir(background_dir) if i.endswith('.jpg')]
-rangs = [os.path.join(source_dir, i) for i in os.listdir(source_dir) if len(i) <= 2]
-suits = [os.path.join(source_dir, i) for i in os.listdir(source_dir) if len(i) > 2]
-print (rangs)
-"""
-all_fonts = []
-for root, dirs, files in os.walk(font_dir):
-    for file in files:
-        if file.endswith('.ttf'):
-            path = os.path.join(root, file)
-            all_fonts += [path]
-
-"""
+RANGS = os.path.join(PIPELINE_FOLDER, 'Rangs')  # dir with crop rang / suits for big card
+BIG_SUITS = os.path.join(PIPELINE_FOLDER, 'SuitsBig')  # dir with big suits
+SMALL_SUITS = os.path.join(PIPELINE_FOLDER, 'SuitsSmall')  # dir with small suits
+backgrounds = glob.glob(BACKGROUNDS + '/*')
+all_fonts = glob.glob(FONTS + '/*ttf')
 
 
 def list_dir(some_dir):
     return [os.path.join(some_dir, i) for i in sorted(os.listdir(some_dir))]
 
 
-big_list = list_dir(big_suits_dir)
-small_list = list_dir(small_suits_dir)
+rangs = list_dir(RANGS)
+big_list = list_dir(BIG_SUITS)
+small_list = list_dir(SMALL_SUITS)
 
 
 # RANDOM VALUES TO GEN
 
-def random_money():
-    return '$' + str(round(random.uniform(0.0, 200.00), 2))
+def random_int():
+    return str(round(random.randint(0, 500), 2))
+
+
+def random_float():
+    return str(round(random.uniform(0.0, 500.00), 2))
+
+
+def random_money_float():
+    return '$' + str(round(random.uniform(0.0, 500.00), 2))
+
+
+def random_money_int():
+    return '$' + str(round(random.randint(0, 500), 2))
+
+
+def all_money_position():
+    all_money = [random_int(), random_float(),
+                 random_money_int(), random_money_float()]
+    return random.choice(all_money)
 
 
 def random_white():
+    unique_white = [[221, 255, 235], [222, 226, 225],
+                    [255, 255, 255], [251, 228, 236], [252, 252, 252]]
     index = random.randint(0, len(unique_white) - 1)
     return tuple(unique_white[index])
 
@@ -65,12 +72,22 @@ def random_file(folder_list):
     return all_files[index]
 
 
-symb = string.ascii_letters + string.digits + '-'
+symb = string.ascii_letters + '%/'
 
 
 def random_symb():
     index = random.randint(0, len(symb) - 1)
-    return symb[index]
+    return symb[index].lower()
+
+
+def random_text():
+    permissible_numbers = [4, 5, 6, 7]
+    a = str('')
+    word_len = random.choice(permissible_numbers)
+    for i in range(word_len):
+        a += random_symb()
+    a = a[0].capitalize() + a[1::]
+    return a
 
 
 def random_sentence():
